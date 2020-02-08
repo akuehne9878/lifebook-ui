@@ -1,58 +1,35 @@
-const express = require("express");
-const fileUpload = require("express-fileupload");
-const Constants = require("./Constants");
+var express = require('express'),
+  app = express(),
+  compression = require('compression'),
+  open = require('open'),
+  serveIndex = require('serve-index'),
+  port = process.env.PORT || 8080,
+  publicPath = '/app',
+  directory = __dirname + publicPath,
+  launchUrl = 'http://localhost:' + port + publicPath,
+  year = 60 * 60 * 24 * 365 * 1000;
 
+// use compress middleware to gzip content
+app.use(compression());
 
-var fs = require("fs");
+// set default mime type to xml for ".library" files
+express.static.mime.default_type = "text/xml";
 
-var path = require("path");
+// serve up content directory showing hidden (leading dot) files
+app.use(publicPath, express.static(directory));
+app.use('/openui5', express.static(__dirname + '/openui5'));
 
-var app = express();
+// enable directory listing
+app.use("/", serveIndex(__dirname, { 'icons': true }))
 
-app.use(express.json());
+// start server
+app.listen(port);
 
-// default options
-app.use(fileUpload());
+// launch uri in default browser
+//open(launchUrl);
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  res.header("Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, OPTIONS");
-  next();
-});
-
-function sendFile(fileName, res) {
-  if (fs.existsSync(fileName)) {
-    res.sendFile(fileName, function (err) {
-      if (err) throw err;
-      console.log("File sent:", fileName);
-    });
-  } else {
-    res.status(404).send("Not found");
-    console.log("Not found:", fileName);
-  }
-}
-// UI5 bootstrapping
-app.get("/", function (req, res) {
-  sendFile(path.join(__dirname, "ui5/index.html"), res);
-});
-
-app.get("/ui5/*", function (req, res) {
-  sendFile(path.join(__dirname, req.path), res);
-});
-
-app.get("/" + Constants.NAME + "/*", function (req, res) {
-  sendFile(path.join(Constants.PATH, decodeURIComponent(req.path)), res);
-});
-
-
-const port = 8080;
-app.listen(port, () => {
-  console.log("lifebook-ui listening on port " + port);
-});
-
-
-
+// log to server console
+console.log("OpenUI5 SDK server running at\n  => " + launchUrl + " \nCTRL + C to shutdown")
 
 
 

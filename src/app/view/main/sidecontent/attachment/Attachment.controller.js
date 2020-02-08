@@ -27,12 +27,12 @@ sap.ui.define(
 
       onDownload: function (oEvent) {
         var obj = this.getOwnerComponent().getModel("currAttachment").getData();
-        window.location.href = obj.file + "?download=true";
+        window.location.href = "http://localhost:9080" + obj.file + "?download=true";
       },
 
       onViewInBrowser: function (oEvent) {
         var obj = this.getOwnerComponent().getModel("currAttachment").getData();
-        window.open(obj.file, "_blank");
+        window.open("http://localhost:9080" + obj.file, "_blank");
       },
 
 
@@ -44,7 +44,7 @@ sap.ui.define(
           .getModel("currPage")
           .getData();
 
-        this._pdfViewer.setSource("/api/getFile?path=" + currPage.path + "&" + "name=" + obj.name);
+        this._pdfViewer.setSource("http://localhost:9080/api/getFile?path=" + currPage.path + "&" + "name=" + obj.name);
         this._pdfViewer.setTitle(obj.name);
         this._pdfViewer.setShowDownloadButton(false);
         this._pdfViewer.open();

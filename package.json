@@ -7,7 +7,6 @@
   },
   "dependencies": {
     "dateformat": "^3.0.3",
-    "express": "4.17.1",
     "express-fileupload": "1.1.5",
     "force": "0.0.3",
     "fs-extra": "^8.1.0",
@@ -18,7 +17,11 @@
     "sqlite3": "^4.1.1"
   },
   "devDependencies": {
-    "nodemon": "1.18.4"
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "nodemon": "1.18.4",
+    "open": "^7.0.2",
+    "serve-index": "^1.9.1"
   },
   "keywords": []
 }

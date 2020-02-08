@@ -15,7 +15,7 @@
 							<Label text="{currPage>date}" wrapping="true"/>
 						</VBox>
 					</HBox>
-					<Image src="{currPage>thumbnail}" width="100%" visible="{= ${currPage>type} === 'JPG' }"/>
+					<Image src="http://localhost:9080{currPage>thumbnail}" width="100%" visible="{= ${currPage>type} === 'JPG' }"/>
 				</VBox>
 			</f:GridListItem>
 		</f:GridList>
