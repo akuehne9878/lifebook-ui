@@ -1,0 +1,24 @@
+{
+  "name": "lifebook-ui",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "nodemon src/index.js localhost 8080"
+  },
+  "dependencies": {
+    "dateformat": "^3.0.3",
+    "express": "4.17.1",
+    "express-fileupload": "1.1.5",
+    "force": "0.0.3",
+    "fs-extra": "^8.1.0",
+    "gfm.css": "^1.1.2",
+    "rimraf": "2.6.3",
+    "sharp": "^0.23.4",
+    "sqlite-parser": "^1.0.1",
+    "sqlite3": "^4.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "1.18.4"
+  },
+  "keywords": []
+}
