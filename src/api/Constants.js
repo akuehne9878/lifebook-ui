@@ -2,7 +2,7 @@ var path = require("path");
 
 var Constants = {
   NAME: "lifebook",
-  PATH: path.join("D:", "dev", "lifebook-data"),
+  PATH: path.join("/home", "pi", "lifebook-data"),
   CACHE:  "cache",
   PAGES: "pages",
   DB: "db"

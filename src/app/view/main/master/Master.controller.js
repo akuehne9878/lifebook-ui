@@ -55,7 +55,7 @@ sap.ui.define(
       _navToPage: function (sPath) {
         var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
         oRouter.navTo("page", {
-          path: sPath
+          path: encodeURIComponent(sPath)
         });
 
         var mainController = this.getController("lifebook.view.main.Main");

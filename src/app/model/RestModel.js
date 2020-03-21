@@ -9,6 +9,7 @@ sap.ui.define(["jquery.sap.global", "sap/ui/model/json/JSONModel", "sap/ui/model
     },
 
     loadPage: function (data) {
+      data.path = decodeURIComponent(data.path);
       return this._post("/api/loadPage", data);
     },
 
