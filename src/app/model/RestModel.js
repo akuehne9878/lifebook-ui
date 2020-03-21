@@ -120,7 +120,7 @@ sap.ui.define(["jquery.sap.global", "sap/ui/model/json/JSONModel", "sap/ui/model
 
     _ajax: function (url, method, data) {
 
-      url = "http://localhost:9080" + url;
+      // url = "http://localhost:8080" + url;
 
       var that = this;
       var promise = new Promise(function (resolve, reject) {

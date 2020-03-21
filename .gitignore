@@ -1,2 +1,3 @@
 node_modules
-src/openui5/resources
+src/app/openui5/resources
+dist
