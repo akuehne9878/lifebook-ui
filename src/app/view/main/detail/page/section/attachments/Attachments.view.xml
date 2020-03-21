@@ -7,7 +7,7 @@
 			<f:GridListItem type="Active" selected="{currPage>selected}" unread="{currPage>selected}" class="noBorderBottom noContentPadding" press="onPress">
 				<VBox height="100%">
 					<HBox>
-						<Checkbox selected="{currPage>selected}" select="onSelectionChange"/>
+						<CheckBox selected="{currPage>selected}" select="onSelectionChange"/>
 						<Label class="sapUiSmallMarginTop" text="{currPage>name}" wrapping="true"/>
 					</HBox>
 					<HBox height="100%" class="sapUiSmallMargin" alignItems="Center" visible="{= ${currPage>type} !== 'JPG' }">
