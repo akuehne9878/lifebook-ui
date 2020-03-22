@@ -1,4 +1,4 @@
-sap.ui.define(["jquery.sap.global", "sap/ui/model/json/JSONModel", "sap/ui/model/resource/ResourceModel"], function (jquery, JSONModel, ResourceModel) {
+sap.ui.define(["jquery.sap.global", "sap/ui/core/BusyIndicator", "sap/ui/model/json/JSONModel", "sap/ui/model/resource/ResourceModel"], function (jquery, BusyIndicator, JSONModel, ResourceModel) {
   return JSONModel.extend("lifebook.model.RestModel", {
     tree: function () {
       return this._get("/api/tree");
@@ -123,6 +123,8 @@ sap.ui.define(["jquery.sap.global", "sap/ui/model/json/JSONModel", "sap/ui/model
 
       // url = "http://localhost:8080" + url;
 
+      BusyIndicator.show();
+
       var that = this;
       var promise = new Promise(function (resolve, reject) {
         jquery.ajax({
@@ -133,6 +135,7 @@ sap.ui.define(["jquery.sap.global", "sap/ui/model/json/JSONModel", "sap/ui/model
           contentType: "application/json",
           success: function (result) {
             that.setProperty("/", result);
+            BusyIndicator.hide();
             resolve(result);
           },
           error: function (err) {
