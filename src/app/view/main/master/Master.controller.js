@@ -31,7 +31,6 @@ sap.ui.define(
 
             that.expandTreeItem(localStorage.getItem("lifebook.currPage.path"));
 
-
             resolve();
           });
         })
@@ -47,6 +46,8 @@ sap.ui.define(
         }
 
         if (oObj.type === "lifebook" || oObj.type === "page") {
+          this.onCollapseAll();
+          this.expandTreeItem(oObj.path);
           this.reloadPage(oObj.path);
           this.getModel("mdsPage").setProperty("/showSideContent", false);
         }
@@ -109,7 +110,7 @@ sap.ui.define(
         }
 
         var paths = [];
-        var parts = sPath.split("\\");
+        var parts = sPath.split("/");
         var temp = ""
 
         var breadcrumbs = [];
@@ -119,7 +120,7 @@ sap.ui.define(
           if (i == 0) {
             temp += parts[i];
           } else {
-            temp += "\\" + parts[i]
+            temp += "/" + parts[i]
           }
           paths.push(temp);
           breadcrumbs.push({ name: parts[i], path: temp });
