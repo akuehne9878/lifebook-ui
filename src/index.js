@@ -37,8 +37,8 @@ app.use(compression());
 express.static.mime.default_type = "text/xml";
 
 // serve up content directory showing hidden (leading dot) files
+app.use('/app/openui5', express.static(__dirname + '/openui5'));
 app.use(publicPath, express.static(directory));
-app.use('/openui5', express.static(__dirname + '/openui5'));
 
 // // enable directory listing
 // app.use("/", serveIndex(__dirname, { 'icons': true }))

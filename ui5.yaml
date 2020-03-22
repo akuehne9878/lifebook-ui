@@ -7,11 +7,9 @@ resources:
   configuration:
     paths:
       webapp: src/app
+      "/src/index.js": dist
 
 builder:
   resources:
     excludes:
       - "lib/**"
-      - "openui5/**"
-      - "index.js"
-

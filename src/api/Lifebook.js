@@ -93,8 +93,10 @@ var Lifebook = {
 
               var s = sharp(absolutePath);
               s.metadata(function (err, info) {
-                obj.height = info.height;
-                obj.width = info.width;
+                if (info) {
+                  obj.height = info.height;
+                  obj.width = info.width;
+                }
 
                 resolve();
               })
@@ -483,25 +485,30 @@ var Lifebook = {
 
   uploadFile: function (req, res) {
 
+    
     var sPath = decodeURIComponent(req.path).replace("upload", "").substring(1);
-
+    
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
     var uploadFile = req.files["uploadFile[]"];
-
+    
     var files = [];
     if (Array.isArray(uploadFile)) {
       files = uploadFile;
     } else {
       files.push(uploadFile);
     }
+    
 
-
+    console.log("Upload File: sPath=" + sPath);
+    
     var errMsg = null;
     files.forEach(function (file) {
-
+      
       var absolutePath = path.join(LIFEBOOK_PATH, sPath, file.name)
-      var absolutePathThumb = path.join(LIFEBOOK_PATH, sPath, "thumb_" + file.name);
-
+      
+      console.log("Upload File: filename=" + file.name);
+      console.log("Upload File: absolutePath=" + absolutePath);
+ 
       // Use the mv() method to place the file somewhere on your server
       file.mv(absolutePath, function (err) {
         if (err) {

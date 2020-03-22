@@ -3,7 +3,7 @@
     <content>
       <VBox class="sapUiSmallMarginTopBottom sapUiSmallMarginBeginEnd">
         <VBox justifyContent="End" alignItems="End" alignContent="End">
-          <u:FileUploader id="fileUploader" multiple="true" name="uploadFile" uploadUrl="{currPage>/path}/upload" uploadComplete="handleUploadComplete"></u:FileUploader>
+          <u:FileUploader id="fileUploader" multiple="true" name="uploadFile" uploadUrl="/{currPage>/path}/upload" uploadComplete="handleUploadComplete"></u:FileUploader>
           <Button type="Emphasized" text="Upload" enabled="{=${currTarget>/title} !== undefined}" icon="sap-icon://save" press="handleUploadPress"/>
         </VBox>
       </VBox>

@@ -17,12 +17,12 @@ module.exports = function(grunt) {
 		openui5_connect: {
 			options: {
 				resources: [
-					'src/ui5/lib/resources',
+					'openui5/resources',
 				]
 			},
 			src: {
 				options: {
-					appresources: 'webapp'
+					appresources: 'src/app'
 				}
 			},
 			dist: {
@@ -36,8 +36,8 @@ module.exports = function(grunt) {
 			component: {
 				options: {
 					resources: {
-						cwd: 'webapp',
-						prefix: 'simple-app',
+						cwd: 'src',	
+						prefix: 'app',					
 						src: [
 							'**/*.js',
 							'**/*.fragment.html',
@@ -48,7 +48,6 @@ module.exports = function(grunt) {
 							'**/*.view.xml',
 							'**/*.properties',
 							'manifest.json',
-							'!test/**'
 						]
 					},
 					dest: 'dist'
@@ -66,7 +65,7 @@ module.exports = function(grunt) {
 			dist: {
 				files: [ {
 					expand: true,
-					cwd: 'webapp',
+					cwd: 'app',
 					src: [
 						'**',
 						'!test/**'
@@ -77,7 +76,7 @@ module.exports = function(grunt) {
 		},
 
 		eslint: {
-			webapp: ['webapp']
+			webapp: ['src/app']
 		}
 
 	});
