@@ -9,7 +9,7 @@
 		<c:detailHeader>
 			<OverflowToolbar>
 				<!-- Page -->
-				<Button type="Transparent" icon="sap-icon://menu" press="onShowMenu"/>
+				<Button type="Transparent" icon="sap-icon://menu" press="onShowMenu" visible="{device>/system/phone}" />
 				<Button type="Transparent" icon="sap-icon://add-document" text="Neue Seite" press="onShowNewPage" visible="{toolbar>/newPage}"/>
 				<Button type="Transparent" icon="sap-icon://edit" text="Umbenennen" press="onShowRenamePage" visible="{toolbar>/renamePage}"/>
 				<Button type="Transparent" icon="sap-icon://source-code" text="Text bearbeiten" press="onShowEditor" visible="{toolbar>/editor}"/>
