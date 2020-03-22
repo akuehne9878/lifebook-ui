@@ -1,6 +1,6 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:c="lifebook.components" xmlns:codeeditor="sap.ui.codeeditor" xmlns:core="sap.ui.core" xmlns:grid="sap.ui.layout.cssgrid" xmlns:f="sap.f" xmlns:layout="sap.ui.layout" xmlns:uxap="sap.uxap" controllerName="lifebook.view.main.detail.page.type.standard.Standard" xmlns:html="http://www.w3.org/1999/xhtml" height="100%">
 	<uxap:ObjectPageLayout showTitleInHeaderContent="true" showEditHeaderButton="false" editHeaderButtonPress="handleEditBtnPress">
-		<uxap:headerTitle>
+		<!-- <uxap:headerTitle>
 			<uxap:ObjectPageHeader objectImageShape="Circle" objectTitle="{currPage>/title}" isObjectTitleAlwaysVisible="false" showPlaceholder="true" objectImageBackgroundColor="Random">
 				<uxap:breadcrumbs>
 					<Breadcrumbs links="{breadcrumbs>/}">
@@ -8,7 +8,51 @@
 					</Breadcrumbs>
 				</uxap:breadcrumbs>
 			</uxap:ObjectPageHeader>
-		</uxap:headerTitle>
+		</uxap:headerTitle> -->
+
+
+
+		<uxap:headerTitle>
+				<uxap:ObjectPageDynamicHeaderTitle>
+					<uxap:expandedHeading>
+						<FlexBox fitContainer="true" alignItems="Center">
+							<Avatar src="sap-icon://picture" backgroundColor="Random" class="sapUiTinyMarginEnd"/>
+							<Title text="{currPage>/title}" wrapping="true" />
+						</FlexBox>
+					</uxap:expandedHeading>
+
+					<uxap:snappedHeading>
+						<FlexBox fitContainer="true" alignItems="Center">
+							<Avatar src="sap-icon://picture" backgroundColor="Random" class="sapUiTinyMarginEnd"/>
+							<Title text="{currPage>/title}" wrapping="true" />
+						</FlexBox>
+					</uxap:snappedHeading>
+
+					<!-- <uxap:expandedContent>
+						<Text text="Senior Developer"/>
+					</uxap:expandedContent>
+
+					<uxap:snappedContent>
+						<Text text="Senior Developer"/>
+					</uxap:snappedContent>
+
+					<uxap:snappedTitleOnMobile>
+						<Title text="Header Title On Phone"/>
+					</uxap:snappedTitleOnMobile> -->
+
+				<uxap:actions>
+					<OverflowToolbarButton icon="sap-icon://pull-down" text="show section" type="Emphasized" tooltip="pull-down"/>
+					<OverflowToolbarButton icon="sap-icon://show" text="show state" type="Emphasized" tooltip="show"/>
+				</uxap:actions>
+
+				</uxap:ObjectPageDynamicHeaderTitle>
+			</uxap:headerTitle>
+
+
+
+
+
+
 		<uxap:headerContent></uxap:headerContent>
 		<uxap:sections>
 			<uxap:ObjectPageSection title="Inhalt">
