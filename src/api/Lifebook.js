@@ -6,6 +6,7 @@ var sharp = require('sharp');
 var dateFormat = require('dateformat');
 const Constants = require("./Constants");
 var hash = require('object-hash');
+const pdf = require('pdf-thumbnail');
 
 const ORM = require("./ORM");
 
@@ -85,7 +86,7 @@ var Lifebook = {
 
           obj.file = "/api/file/" + req.body.path + "/" + dirent.name;
 
-          if (dirent.name.toUpperCase().endsWith("JPG")) {
+          if (dirent.name.toUpperCase().endsWith("JPG") || dirent.name.toUpperCase().endsWith("PDF")) {
             promises.push(new Promise(function (resolve, reject) {
               obj.thumbnail = encodeURI("/api/thumbnail?path=" + req.body.path + "&name=" + dirent.name);
 
@@ -457,22 +458,46 @@ var Lifebook = {
     absolutePath = absolutePath.split("\\").join("/");
 
 
+
+
     var cachedFilePath = path.join(Constants.LIFEBOOK_CACHE_PATH, hash(absolutePath) + ".jpg");
 
     try {
       if (fs.existsSync(cachedFilePath)) {
         res.sendFile(cachedFilePath);
       } else {
-        sharp(absolutePath)
-          .rotate()
-          .resize({ height: 300, width: 300 })
-          .toFile(cachedFilePath, function (err) {
-            if (err) {
-              res.sendStatus(500);
-              return;
+        if (req.query.name.toUpperCase().endsWith("JPG")) {
+          sharp(absolutePath)
+            .rotate()
+            .resize({ height: 300, width: 300 })
+            .toFile(cachedFilePath, function (err) {
+              if (err) {
+                res.sendStatus(500);
+                return;
+              }
+              res.sendFile(cachedFilePath);
+            });
+        } else {
+          const pdfBuffer = require('fs').readFileSync(absolutePath);
+          pdf(pdfBuffer, {
+            compress: {
+              type: 'JPEG',  //default
+              quality: 100    //default
+            },
+            crop: {
+              width: 300,
+              height: 300,
+              x: 10,
+              y: 10,
+              ratio: true
             }
-            res.sendFile(cachedFilePath);
-          });
+          })
+            .then(function (data) {
+              data.pipe(fs.createWriteStream(cachedFilePath));
+              res.sendFile(cachedFilePath)
+            })
+            .catch(err => console.error(err))
+        }
 
       }
     } catch (err) {
@@ -485,30 +510,30 @@ var Lifebook = {
 
   uploadFile: function (req, res) {
 
-    
+
     var sPath = decodeURIComponent(req.path).replace("upload", "").substring(1);
-    
+
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
     var uploadFile = req.files["uploadFile[]"];
-    
+
     var files = [];
     if (Array.isArray(uploadFile)) {
       files = uploadFile;
     } else {
       files.push(uploadFile);
     }
-    
+
 
     console.log("Upload File: sPath=" + sPath);
-    
+
     var errMsg = null;
     files.forEach(function (file) {
-      
+
       var absolutePath = path.join(LIFEBOOK_PATH, sPath, file.name)
-      
+
       console.log("Upload File: filename=" + file.name);
       console.log("Upload File: absolutePath=" + absolutePath);
- 
+
       // Use the mv() method to place the file somewhere on your server
       file.mv(absolutePath, function (err) {
         if (err) {

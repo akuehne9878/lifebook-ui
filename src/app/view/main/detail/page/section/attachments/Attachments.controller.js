@@ -28,7 +28,10 @@ sap.ui.define(
         var currObject = oBindingContext.getObject();
         this.getOwnerComponent().getModel("currAttachment").setProperty("/", currObject);
 
-        var sideContent = this._getSideContentView(oBindingContext);
+        this.getOwnerComponent().getModel("selectedAttachments").setProperty("/", [currObject]);
+
+
+        var sideContent = this._getSideContentView(currObject);
 
         var mainController = this.getController("lifebook.view.main.Main");
         mainController.setViewMode("singleAttachment");
@@ -52,12 +55,15 @@ sap.ui.define(
         } else if (selectedAttachments.length === 1) {
           // load single
 
-          var oBindingContext = oEvent.getSource().getBindingContext("currPage");
+          var currObject = this.getModel("currPage").getData().files.filter(function (item) {
+            return item.selected === true;
+          })[0];
 
-          var sideContent = this._getSideContentView(oBindingContext);
+
+          var sideContent = this._getSideContentView(currObject);
 
           mainController.setViewMode("singleAttachment");
-          mainController._changeSideContent(sideContent, oBindingContext.getOject().name);
+          mainController._changeSideContent(sideContent, currObject.name);
         } else {
           // load multiple
           mainController.setViewMode("selection");
@@ -66,8 +72,7 @@ sap.ui.define(
 
       },
 
-      _getSideContentView: function (oBindingContext) {
-        var currObject = oBindingContext.getObject();
+      _getSideContentView: function (currObject) {
 
         this.getOwnerComponent().getModel("currAttachment").setProperty("/", currObject);
 
@@ -113,6 +118,8 @@ sap.ui.define(
           item.selected = false;
         })
         this.getModel("currPage").setProperty("/", data);
+
+        this.getOwnerComponent().getModel("selectedAttachments").setProperty("/", []);
       },
 
     });

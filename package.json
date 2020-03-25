@@ -17,6 +17,7 @@
     "grunt-contrib-connect": "^2.1.0",
     "grunt-contrib-copy": "^1.0.0",
     "object-hash": "^2.0.3",
+    "pdf-thumbnail": "^1.0.6",
     "rimraf": "2.6.3",
     "sharp": "^0.25.1",
     "sqlite-parser": "^1.0.1",

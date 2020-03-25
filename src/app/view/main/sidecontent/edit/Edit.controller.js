@@ -55,7 +55,7 @@ sap.ui.define(
         var that = this;
 
         var oldTitle = this.getOwnerComponent().getModel("currAttachment").getProperty("/name");
-        var path = this.getOwnerComponent().getModel("currPage").getProperty("/path") + "\\" + oldTitle;
+        var path = this.getOwnerComponent().getModel("currPage").getProperty("/path") + "/" + oldTitle;
 
         var newTitle = this.getModel().getProperty("/title");
         

@@ -25,7 +25,7 @@ sap.ui.define(["sap/ui/core/BusyIndicator","sap/ui/Device", "sap/ui/core/UICompo
       this.setModel(new JSONModel(), "detailHeader");
 
       this.setModel(new JSONModel(), "currAttachment");
-      this.setModel(new JSONModel(), "selectedAttachments");
+      this.setModel(new JSONModel([]), "selectedAttachments");
 
       this.setModel(new JSONModel({
         sideContentViewName: "",

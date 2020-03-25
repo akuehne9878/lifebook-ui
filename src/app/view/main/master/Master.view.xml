@@ -2,7 +2,8 @@
    <Page showHeader="true" background="Solid">
       <customHeader>
          <Toolbar>
-            <SearchField search="onFilter" liveChange="onFilter"/>
+            <!-- <SearchField search="onFilter" liveChange="onFilter"/> -->
+            <ToolbarSpacer />
             <Button type="Transparent" icon="sap-icon://expand-all" press="onExpandAll" />
             <Button type="Transparent" icon="sap-icon://collapse-all" press="onCollapseAll" />
             <Button type="Transparent" icon="sap-icon://decline" press="onClose" visible="{device>/system/phone}" />

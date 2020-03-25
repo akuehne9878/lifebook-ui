@@ -50,6 +50,9 @@
         },
         {
           "uri": "css/gfm.css"
+        },
+        {
+          "uri": "css/dropzone.css"
         }
       ]
     },

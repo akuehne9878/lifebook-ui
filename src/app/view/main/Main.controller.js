@@ -246,7 +246,7 @@ sap.ui.define([
             onAfterCloseSideContent: function (oEvent) {
                 var name = oEvent.getParameter("value").getControllerName();
 
-                if (name.indexOf("lifebook.view.main.sidecontent.attachment") === 0) {
+                if (name.indexOf("lifebook.view.main.sidecontent") === 0) {
                     this.getModel("currAttachment").setProperty("/", null);
 
 
