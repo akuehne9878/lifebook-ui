@@ -5,14 +5,12 @@ sap.ui.define(["sap/ui/core/BusyIndicator","sap/ui/Device", "sap/ui/core/UICompo
     },
 
     init: function () {
+
       // call the init function of the parent
       UIComponent.prototype.init.apply(this, arguments);
 
       // create the views based on the url/hash
       this.getRouter().initialize();
-
-      sap.ui.getCore().getConfiguration().setLanguage("de");
-
 
       this.setModel(new JSONModel(Device), "device");
 

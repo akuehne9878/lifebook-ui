@@ -7,7 +7,7 @@ var dateFormat = require('dateformat');
 const Constants = require("./Constants");
 var hash = require('object-hash');
 const pdf = require('pdf-thumbnail');
-
+const minify = require('minify');
 const ORM = require("./ORM");
 
 
@@ -788,6 +788,96 @@ var Lifebook = {
   },
 
 
+  buildComponentPreload: function (req, res) {
+
+    const options = {
+      html: {
+        removeAttributeQuotes: false,
+      },
+      css: {
+        compatibility: '*',
+      },
+      js: {
+        ecma: 5,
+      },
+      img: {
+        maxSize: 4096,
+      }
+    }
+
+
+    var preload = { modules: {} };
+
+    var prefix = "lifebook";
+    var base = "/home/pi/lifebook-ui/src/app";
+
+    var aExcludeList = ["/lib", "/css", "/index.html", "/Component-preload.js"];
+
+
+    var walkSync = function (dir, filelist) {
+      var files = fs.readdirSync(dir);
+      filelist = filelist || [];
+      files.forEach(function (file) {
+        if (fs.statSync(path.join(dir, file)).isDirectory()) {
+          filelist = walkSync(path.join(dir, file), filelist);
+        }
+        else {
+          var filePath = path.join(dir, file);
+          var bAddFile = true;
+
+          aExcludeList.forEach(function (excludeItem) {
+            if (filePath.startsWith(base + excludeItem)) {
+              bAddFile = false;
+            }
+          });
+          if (bAddFile) {
+            filelist.push({ fullFilePath: filePath, preloadPath: filePath.replace(base, prefix) });
+          }
+        }
+      });
+      return filelist;
+    };
+
+    var result = "sap.ui.require.preload({";
+
+    var filelist = walkSync(base);
+    filelist.forEach(function (obj) {
+
+
+      result += "\n\"" + obj.preloadPath + "\":";
+
+
+      var fileContent = fs.readFileSync(obj.fullFilePath).toString();
+
+      if (obj.preloadPath.endsWith("js")) {
+        result += "function() {" + fileContent + "},";
+      } else if (obj.preloadPath.endsWith("json")) {
+        result += "'" + JSON.stringify(fileContent) + "',";
+      } else if (obj.preloadPath.endsWith("xml")) {
+        fileContent = fileContent.replace(/(?:\r\n|\r|\n)/g, "\\n");
+        fileContent = fileContent.replace(/(')/g, "\\'");
+
+
+        result += "'" + fileContent + "',";
+      } else if (obj.preloadPath.endsWith("properties")) {
+        fileContent = fileContent.replace(/(?:\r\n|\r|\n)/g, "\\n");
+        result += "'" + fileContent + "',";
+      }
+
+    })
+
+
+    result = result.slice(0, -1); // remove last ","
+    result += "\n});";
+
+    
+    
+    res.writeHead(200, { "Content-Type": "text/js" });
+    res.write(result);
+    res.end();
+
+    fs.writeFileSync(base + "/Component-preload.js", result);
+  }
 
 
 

@@ -14,6 +14,7 @@ const Lifebook = require("./api/Lifebook");
 const fileUpload = require("express-fileupload");
 const Constants = require("./api/Constants");
 
+
 var fs = require("fs");
 var path = require("path");
 
@@ -95,6 +96,9 @@ app.post("/api/saveMetainfo", Lifebook.saveMetainfo);
 app.get("/api/resize", Lifebook.resizeImage);
 
 app.get("/api/thumbnail", Lifebook.thumbnail);
+
+app.get("/api/buildComponentPreload", Lifebook.buildComponentPreload);
+
 
 
 
