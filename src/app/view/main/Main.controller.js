@@ -86,7 +86,7 @@ sap.ui.define([
             },
 
             _changeSideContent: function (sViewName, sTitle) {
-                
+
                 this.getModel("mdsPage").setProperty("/sideContentViewName", sViewName);
                 this.getModel("mdsPage").setProperty("/sideContentTitle", sTitle);
                 this.getModel("mdsPage").setProperty("/showSideContent", true);
@@ -104,7 +104,7 @@ sap.ui.define([
             },
 
             onShowNewPage: function (oEvent) {
-                this._loadSideContent("lifebook.view.main.sidecontent.new.New", "Neue Seite")
+                this._loadSideContent("lifebook.view.main.sidecontent.new.New", "Neue Seite", { parentPath: this.getOwnerComponent().getModel("currPage").getProperty("/path"), caller: this.getView().getViewName() })
             },
 
             onShowRenamePage: function (oEvent) {
@@ -157,10 +157,8 @@ sap.ui.define([
                     onClose: function (sAction) {
                         if (sAction === sap.m.MessageBox.Action.DELETE) {
                             oRestModel.deletePage({ path: currPage.path }).then(function (data) {
-                                that
-                                    .getView()
-                                    .getModel("tree")
-                                    .setProperty("/", data);
+                                that.getView().getModel("tree").setProperty("/", data);
+                                that.getView().getModel("targetTree").setProperty("/", data);
 
                             });
                         }

@@ -24,16 +24,30 @@ sap.ui.define(
 
       onSave: function (oEvent) {
         var that = this;
-        var path = this.getOwnerComponent().getModel("currPage").getProperty("/path");
+        var path = this.getModel("options").getProperty("/parentPath")
+        var caller = this.getModel("options").getProperty("/caller");
 
         var title = this.getModel().getProperty("/title");
         var type = this.getModel().getProperty("/type");
-        var newPath = path + "\\" + title;
+        var newPath = path + "/" + title;
 
         var oRestModel = new RestModel();
         oRestModel.createPage({ title: title, path: path, type: type }).then(function (data) {
-          that.getController("lifebook.view.main.master.Master").reloadPage(newPath, { reloadTree: true });
-          that.getModel("mdsPage").setProperty("/showSideContent", false);
+
+          if (caller.endsWith("Main")) {
+            that.getController("lifebook.view.main.master.Master").reloadPage(newPath, { reloadTree: true });
+            that.getModel("mdsPage").setProperty("/showSideContent", false);
+          } else {
+
+
+            that.getController("lifebook.view.main.master.Master").reloadLifebookTree().then(function() {
+              that.getController("lifebook.view.main.Main")._loadSideContent(caller, "Seite verschieben", {mode: "page", preSelectedPath: newPath})
+            });
+
+           
+
+          }
+
         });
       }
     });

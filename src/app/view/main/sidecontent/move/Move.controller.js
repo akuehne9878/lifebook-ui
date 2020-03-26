@@ -19,6 +19,13 @@ sap.ui.define(
       setup: function (oOptions) {
         this.setModel(new JSONModel(oOptions), "options")
         this.setModel(new JSONModel({}), "currTarget");
+
+        if (oOptions.preSelectedPath) {
+          this.getModel("currTarget").setProperty("/path", oOptions.preSelectedPath);
+          this.getModel("currTarget").setProperty("/title", oOptions.preSelectedPath);
+          this._expandTreeItem(oOptions.preSelectedPath);
+        }
+
       },
 
       onPress: function (oEvent) {
@@ -28,6 +35,11 @@ sap.ui.define(
         this.getModel("currTarget").setProperty("/path", oObj.path);
         this.getModel("currTarget").setProperty("/title", oObj.title);
 
+      },
+
+      onShowNewPage: function(oEvent) {
+        var dstPath = this.getModel("currTarget").getProperty("/path");
+        this.getController("lifebook.view.main.Main")._loadSideContent("lifebook.view.main.sidecontent.new.New", "Neue Seite", {parentPath: dstPath, caller: this.getView().getViewName()})
       },
 
       onSave: function (oEvent) {
@@ -77,6 +89,45 @@ sap.ui.define(
           that.getOwnerComponent().getModel("selectedAttachments").setProperty("/", null);
         });
       },
+
+      _expandTreeItem: function (sPath) {
+
+        if (!sPath) {
+          return;
+        }
+
+        var paths = [];
+        var parts = sPath.split("/");
+        var temp = ""
+
+        // var breadcrumbs = [];
+
+
+        for (var i = 0; i < parts.length; i++) {
+          if (i == 0) {
+            temp += parts[i];
+          } else {
+            temp += "/" + parts[i]
+          }
+          paths.push(temp);
+          // breadcrumbs.push({ name: parts[i], path: temp });
+        }
+
+        // breadcrumbs.pop();  // remove last element
+
+        var that = this;
+        paths.forEach(function (path) {
+          var items = that.getView().byId("moveTree").getItems();
+          items.forEach(function (item, index) {
+            if (path === item.getBindingContext("targetTree").getObject("path")) {
+              that.getView().byId("moveTree").expand(index);
+            }
+          })
+        });
+
+
+      },
+
 
     });
   }
