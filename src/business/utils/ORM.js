@@ -26,7 +26,7 @@ var ORM = {
             console.log("\t" + sql);
             console.log("\t" + values);
 
-            let db = new sqlite3.Database(path.join(Constants.LIFEBOOK_DB_PATH, "lifebook.db"));
+            let db = new sqlite3.Database(path.join(Constants.WORKSPACE_DB_PATH, "lifebook.db"));
             var stmt;
             db.on("error", function (error) {
                 console.log("Getting an error : ", error);

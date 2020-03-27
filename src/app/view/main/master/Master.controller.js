@@ -23,7 +23,7 @@ sap.ui.define(
        
         var p = new Promise(function (resolve, reject) {
           var oRestModel = new RestModel();
-          oRestModel.tree().then(function (data) {
+          oRestModel.tree({workspace: "lifebook"}).then(function (data) {
             oRestModel.setProperty("/", data);
 
             that.getModel("targetTree").setProperty("/", data);

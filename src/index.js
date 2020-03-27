@@ -10,9 +10,14 @@ var express = require('express'),
   year = 60 * 60 * 24 * 365 * 1000;
 
 
-const Lifebook = require("./api/Lifebook");
+const WorkspaceApi = require("./business/api/WorkspaceApi");
+const PageApi = require("./business/api/PageApi");
+const FileApi = require("./business/api/FileApi");
+const AppApi = require("./business/api/AppApi");
+const InvoiceApi = require("./business/api/InvoiceApi");
+
 const fileUpload = require("express-fileupload");
-const Constants = require("./api/Constants");
+const Constants = require("./business/utils/Constants");
 
 
 var fs = require("fs");
@@ -45,100 +50,89 @@ app.use(publicPath, express.static(directory));
 // app.use("/", serveIndex(__dirname, { 'icons': true }))
 
 
+
+/* Workspace */
+
+app.post("/api/workspace/workspaceTree", WorkspaceApi.workspaceTree);
+
+
+
 /* Page */
 
-app.get("/api/tree", Lifebook.tree);
 
-app.post("/api/createPage", Lifebook.createPage);
+app.post("/api/page/create", PageApi.createPage);
 
-app.post("/api/loadPage", Lifebook.loadPage);
+app.post("/api/page/load", PageApi.loadPage);
 
-app.post("/api/savePage", Lifebook.savePage);
+app.post("/api/page/save", PageApi.savePage);
 
-app.post("/api/deletePage", Lifebook.deletePage);
+app.post("/api/page/delete", PageApi.deletePage);
 
-app.post("/api/renamePage", Lifebook.renamePage);
+app.post("/api/page/rename", PageApi.renamePage);
 
-app.post("/api/copyPage", Lifebook.copyPage);
+app.post("/api/page/copy", PageApi.copyPage);
 
-app.post("/api/movePage", Lifebook.movePage);
+app.post("/api/page/move", PageApi.movePage);
 
 
 /* File */
 
 
-app.post("/api/deleteFile", Lifebook.deleteFile);
+app.post("/api/file/delete", FileApi.deleteFile);
 
-app.post("/api/renameFile", Lifebook.renameFile);
+app.post("/api/file/rename", FileApi.renameFile);
 
-app.post("/api/copyFile", Lifebook.copyFile);
+app.post("/api/file/copy", FileApi.copyFile);
 
-app.post("/api/moveFile", Lifebook.moveFile);
+app.post("/api/file/move", FileApi.moveFile);
 
-app.post("*/upload", Lifebook.uploadFile);
+app.post("*/upload", FileApi.uploadFile);
 
-app.get("/api/file/*", Lifebook.getFile);
+app.get("/api/file/*", FileApi.getFile);
 
 
 /* METAINFO */
 
-app.post("/api/metaInfoTree", Lifebook.metaInfoTree);
+// app.post("/api/metaInfoTree", Workspace.metaInfoTree);
 
-app.post("/api/loadMetainfo", Lifebook.loadMetainfo);
+// app.post("/api/loadMetainfo", Workspace.loadMetainfo);
 
-app.post("/api/saveMetainfo", Lifebook.saveMetainfo);
+// app.post("/api/saveMetainfo", Workspace.saveMetainfo);
 
 
 
 
 /* MISC */
 
-app.get("/api/resize", Lifebook.resizeImage);
+// app.get("/api/resize", Workspace.resizeImage);
 
-app.get("/api/thumbnail", Lifebook.thumbnail);
+app.get("/api/app/thumbnail", AppApi.thumbnail);
 
-app.get("/api/buildComponentPreload", Lifebook.buildComponentPreload);
+app.get("/api/app/buildComponentPreload", AppApi.buildComponentPreload);
 
 
 
 
 /* SQLITE */
 
-app.post("/api/executeStatement", Lifebook.executeStatement);
+// app.post("/api/executeStatement", Workspace.executeStatement);
 
-app.post("/api/listTables", Lifebook.listTables);
+// app.post("/api/listTables", Workspace.listTables);
 
-app.post("/api/createEntity", Lifebook.createEntity);
+// app.post("/api/createEntity", Workspace.createEntity);
 
-app.post("/api/readEntity", Lifebook.readEntity);
+// app.post("/api/readEntity", Workspace.readEntity);
 
-app.post("/api/updateEntity", Lifebook.updateEntity);
+// app.post("/api/updateEntity", Workspace.updateEntity);
 
-app.post("/api/deleteEntity", Lifebook.deleteEntity);
-
-app.post("/api/page/:pageid/createInvoice", Lifebook.createInvoice);
-
-app.post("/api/page/:pageid/updateInvoice", Lifebook.updateInvoice);
-
-app.post("/api/page/:pageid/loadInvoice", Lifebook.loadInvoice);
+// app.post("/api/deleteEntity", Workspace.deleteEntity); 
 
 
-// function sendFile(fileName, res) {
-//   if (fs.existsSync(fileName)) {
-//     res.sendFile(fileName, function (err) {
-//       if (err) throw err;
-//       console.log("File sent:", fileName);
-//     });
-//   } else {
-//     res.status(404).send("Not found");
-//     console.log("Not found:", fileName);
-//   }
-// }
+app.post("/api/page/:pageid/createInvoice", InvoiceApi.createInvoice);
 
+app.post("/api/page/:pageid/updateInvoice", InvoiceApi.updateInvoice);
 
-// app.get("/" + Constants.NAME + "/*", function (req, res) {
-//   sendFile(path.join(Constants.PATH, decodeURIComponent(req.path)), res);
-// });
+app.post("/api/page/:pageid/loadInvoice", InvoiceApi.loadInvoice);
 
 
 

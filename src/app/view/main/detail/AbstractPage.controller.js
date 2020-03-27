@@ -37,7 +37,7 @@ sap.ui.define(
       reloadPage: function (sPath) {
         var model = new RestModel();
         var that = this;
-        model.loadPage({ path: sPath }).then(function (data) {
+        model.loadPage({ path: sPath , workspace: "lifebook" }).then(function (data) {
 
           data.files.forEach(function (item) {
             item.selected = false;

@@ -1,107 +1,93 @@
 sap.ui.define(["jquery.sap.global", "sap/ui/core/BusyIndicator", "sap/ui/model/json/JSONModel", "sap/ui/model/resource/ResourceModel"], function (jquery, BusyIndicator, JSONModel, ResourceModel) {
   return JSONModel.extend("lifebook.model.RestModel", {
-    tree: function () {
-      return this._get("/api/tree");
+    tree: function (data) {
+      return this._post("/api/workspace/workspaceTree", data);
     },
 
     createPage: function (data) {
-      return this._post("/api/createPage", data);
+      return this._post("/api/page/create", data);
     },
 
     loadPage: function (data) {
       data.path = decodeURIComponent(data.path);
-      return this._post("/api/loadPage", data);
+      return this._post("/api/page/load", data);
     },
 
     savePage: function (data) {
-      return this._post("/api/savePage", data);
+      return this._post("/api/page/save", data);
     },
 
     deletePage: function (data) {
-      return this._post("/api/deletePage", data);
+      return this._post("/api/page/delete", data);
     },
 
     renamePage: function (data) {
-      return this._post("/api/renamePage", data);
+      return this._post("/api/page/rename", data);
     },
 
     copyPage: function (data) {
-      return this._post("/api/copyPage", data);
+      return this._post("/api/page/copy", data);
     },
 
     movePage: function (data) {
-      return this._post("/api/movePage", data);
+      return this._post("/api/page/move", data);
     },
 
     deleteFile: function (data) {
-      return this._post("/api/deleteFile", data);
+      return this._post("/api/file/delete", data);
     },
 
     renameFile: function (data) {
-      return this._post("/api/renameFile", data);
+      return this._post("/api/file/rename", data);
     },
 
     copyFile: function (data) {
-      return this._post("/api/copyFile", data);
+      return this._post("/api/file/copy", data);
     },
 
     moveFile: function (data) {
-      return this._post("/api/moveFile", data);
+      return this._post("/api/file/move", data);
     },
 
-    
-    loadMetainfo: function (data) {
-      return this._post("/api/loadMetainfo", data);
-    },
+    // executeStatement: function (data) {
+    //   return this._post("/api/executeStatement", data);
+    // },
 
-    saveMetainfo: function (data) {
-      return this._post("/api/saveMetainfo", data);
-    },
+    // listTables: function () {
+    //   return this._post("/api/listTables");
+    // },
 
-    
-    metaInfoTree: function () {
-      return this._post("/api/metaInfoTree");
-    },
+    // tableStructure: function (data) {
+    //   return this._post("/api/tableStructure", data);
+    // },
 
-    executeStatement: function (data) {
-      return this._post("/api/executeStatement", data);
-    },
+    // createEntity: function (data) {
+    //   return this._post("/api/createEntity", data);
+    // },
 
-    listTables: function () {
-      return this._post("/api/listTables");
-    },
+    // readEntity: function (data) {
+    //   return this._post("/api/readEntity", data);
+    // },
 
-    tableStructure: function (data) {
-      return this._post("/api/tableStructure", data);
-    },
+    // updateEntity: function (data) {
+    //   return this._post("/api/updateEntity", data);
+    // },
 
-    createEntity: function (data) {
-      return this._post("/api/createEntity", data);
-    },     
-
-    readEntity: function (data) {
-      return this._post("/api/readEntity", data);
-    },    
-
-    updateEntity: function (data) {
-      return this._post("/api/updateEntity", data);
-    }, 
-
-    deleteEntity: function (data) {
-      return this._post("/api/deleteEntity", data);
-    }, 
+    // deleteEntity: function (data) {
+    //   return this._post("/api/deleteEntity", data);
+    // },
 
     createInvoice: function (pageid, data) {
       return this._post("/api/page/" + pageid + "/createInvoice", data);
-    }, 
+    },
 
     updateInvoice: function (pageid, data) {
       return this._post("/api/page/" + pageid + "/updateInvoice", data);
-    }, 
+    },
 
     loadInvoice: function (pageid) {
       return this._post("/api/page/" + pageid + "/loadInvoice");
-    }, 
+    },
 
     _get: function (url) {
       return this._ajax(url, "GET");

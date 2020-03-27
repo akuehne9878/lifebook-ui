@@ -40,7 +40,7 @@ sap.ui.define(
 
             var that = this;
             var oRestModel = new RestModel();
-            oRestModel.loadPage({ path: this.getModel("currPage").getProperty("/path") }).then(function (data) {
+            oRestModel.loadPage({ path: this.getModel("currPage").getProperty("/path"), workspace: "lifebook" }).then(function (data) {
               that.getModel("currPage").setProperty("/", oRestModel.getData());
               that.getModel("mdsPage").setProperty("/showSideContent", false);
             });
