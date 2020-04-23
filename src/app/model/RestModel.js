@@ -49,6 +49,26 @@ sap.ui.define(["jquery.sap.global", "sap/ui/core/BusyIndicator", "sap/ui/model/j
       return this._post("/api/file/move", data);
     },
 
+    createWorkspace: function (data) {
+      return this._post("/api/workspace/create", data);
+    },
+
+    deleteWorkspace: function (data) {
+      return this._post("/api/workspace/delete", data);
+    },
+
+    listWorkspaces: function () {
+      return this._post("/api/workspace/list");
+    },
+
+    getCurrentWorkspace: function () {
+      return this._post("/api/workspace/get");
+    },
+
+    setCurrentWorkspace: function (data) {
+      return this._post("/api/workspace/set", data);
+    },
+
     // executeStatement: function (data) {
     //   return this._post("/api/executeStatement", data);
     // },

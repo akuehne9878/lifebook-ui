@@ -73,7 +73,7 @@
           "target": "main"
         },
         {
-          "pattern": "page/:path:",
+          "pattern": "workspace/:workspace:/page/:path:",
           "name": "page",
           "target": "page"
         },

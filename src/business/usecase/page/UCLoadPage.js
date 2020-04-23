@@ -1,12 +1,8 @@
-var fsExtra = require("fs-extra");
 var fs = require("fs");
 var path = require("path");
-const ORM = require("../../utils/ORM");
-var dateFormat = require('dateformat');
-var sharp = require('sharp');
+var ORM = require("../../utils/ORM");
 
 var Constants = require("../../utils/Constants");
-
 
 var UCLoadPage = {
 

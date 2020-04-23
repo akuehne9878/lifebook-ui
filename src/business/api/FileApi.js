@@ -30,9 +30,9 @@ var FileApi = {
             aFiles.push(uploadFile);
         }
 
-        var sPath = decodeURIComponent(req.path).replace("upload", "").substring(1);
         var errMsg = UCUploadFile.perform({
-            path: sPath,
+            path: req.query.path,
+            workspace: req.query.workspace,
             files: aFiles
         });
 
@@ -72,6 +72,7 @@ var FileApi = {
 
         UCRenameFile.perform({
             path: req.body.path,
+            workspace: req.body.workspace,
             newTitle: req.body.newTitle
         });
 
@@ -88,6 +89,7 @@ var FileApi = {
         Utils.log(req);
 
         UCCopyFile.perform({
+            workspace: req.body.workspace,
             fileNames: req.body.fileNames,
             src: req.body.src,
             dst: req.body.dst
@@ -105,6 +107,7 @@ var FileApi = {
         Utils.log(req);
 
         UCMoveFile.perform({
+            workspace: req.body.workspace,
             fileNames: req.body.fileNames,
             src: req.body.src,
             dst: req.body.dst
@@ -123,6 +126,7 @@ var FileApi = {
 
         UCDeleteFile.perform({
             path: req.body.path,
+            workspace: req.body.workspace,
             fileNames: req.body.fileNames
         });
 

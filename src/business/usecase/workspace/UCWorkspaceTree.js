@@ -13,14 +13,13 @@ var UCWorkspaceTree = {
      */
     perform: function (options) {
 
-        
         const walkSync = (dir, item) => {
             const files = fs.readdirSync(dir);
             var children = [];
             for (const file of files) {
                 const sPath = path.join(dir, file);
                 const dirent = fs.statSync(sPath);
-                
+
                 if (dirent.isDirectory()) {
                     var child = {
                         path: sPath.replace(Constants.WORKSPACE_PATH(options.workspace) + path.sep, "")
@@ -29,10 +28,7 @@ var UCWorkspaceTree = {
                     children.push(child);
                 } else {
                     if (sPath.endsWith("metainfo.json") && item != null) {
-                        item.title = path
-                        .dirname(sPath)
-                        .split(path.sep)
-                        .pop();
+                        item.title = path.dirname(sPath).split(path.sep).pop();
                         item.type = "page";
                     }
                 }
@@ -40,9 +36,18 @@ var UCWorkspaceTree = {
             return children;
         };
 
-        var directoryStructure = walkSync(Constants.WORKSPACE_PATH(options.workspace) );
 
-        return directoryStructure;
+
+        var directoryStructure = walkSync(Constants.WORKSPACE_PATH(options.workspace));
+
+        var root = {
+            title: options.workspace,
+            path: "",
+            type: "workspace",
+            items: directoryStructure,
+        }
+
+        return root;
     }
 
 };

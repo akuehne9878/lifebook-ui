@@ -32,20 +32,15 @@ sap.ui.define(
         var newPath = path + "/" + title;
 
         var oRestModel = new RestModel();
-        oRestModel.createPage({ title: title, path: path, type: type }).then(function (data) {
+        oRestModel.createPage({ title: title, path: path, type: type, workspace: this.getOwnerComponent().getWorkspace()}).then(function (data) {
 
           if (caller.endsWith("Main")) {
-            that.getController("lifebook.view.main.master.Master").reloadPage(newPath, { reloadTree: true });
+            that.getOwnerComponent().navToPage(newPath);
             that.getModel("mdsPage").setProperty("/showSideContent", false);
           } else {
-
-
             that.getController("lifebook.view.main.master.Master").reloadLifebookTree().then(function() {
               that.getController("lifebook.view.main.Main")._loadSideContent(caller, "Seite verschieben", {mode: "page", preSelectedPath: newPath})
             });
-
-           
-
           }
 
         });

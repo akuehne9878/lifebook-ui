@@ -39,13 +39,14 @@ sap.ui.define(
 
         var oldTitle = this.getOwnerComponent().getModel("currPage").getProperty("/title");
         var path = this.getOwnerComponent().getModel("currPage").getProperty("/path");
+        var workspace = this.getOwnerComponent().getWorkspace();
 
         var newTitle = this.getModel().getProperty("/title");
         var newPath = path.substring(0, path.lastIndexOf(oldTitle)) + newTitle
 
         var oRestModel = new RestModel();
 
-        oRestModel.renamePage({ path: path, newTitle: newTitle }).then(function (data) {
+        oRestModel.renamePage({ path: path, workspace: workspace, newTitle: newTitle }).then(function (data) {
           that.getController("lifebook.view.main.master.Master").reloadPage(newPath, { reloadTree: true });
           that.getModel("mdsPage").setProperty("/showSideContent", false);
         });
@@ -56,14 +57,14 @@ sap.ui.define(
 
         var oldTitle = this.getOwnerComponent().getModel("currAttachment").getProperty("/name");
         var path = this.getOwnerComponent().getModel("currPage").getProperty("/path") + "/" + oldTitle;
+        var workspace = this.getOwnerComponent().getWorkspace();
 
-        var newTitle = this.getModel().getProperty("/title");
-        
+        var newTitle = this.getModel().getProperty("/title");        
         var pagePath = this.getOwnerComponent().getModel("currPage").getProperty("/path");
         
         var oRestModel = new RestModel();
-        oRestModel.renameFile({ path: path, newTitle: newTitle }).then(function (data) {
-          that.getController("lifebook.view.main.detail.AbstractPage").reloadPage(pagePath, "attachments");
+        oRestModel.renameFile({ path: path, workspace: workspace, newTitle: newTitle }).then(function (data) {
+          that.getController("lifebook.view.main.detail.AbstractPage").reloadPage(pagePath);
           that.getModel("mdsPage").setProperty("/showSideContent", false);
         });
       }      

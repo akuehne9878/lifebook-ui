@@ -11,7 +11,7 @@ var UCDeleteFile = {
      */
     perform: function (options) {
         options.fileNames.forEach(function (fileName) {
-            var absolutePath = path.join(Constants.WORKSPACE_PATH, options.path, fileName);
+            var absolutePath = path.join(Constants.WORKSPACE_PATH(options.workspace), options.path, fileName);
             rimraf.sync(absolutePath);
         });
     }

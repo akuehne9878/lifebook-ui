@@ -26,7 +26,7 @@ sap.ui.define(
       onNavigateToChildPage: function (oEvent) {
         var object = oEvent.getSource().getBindingContext("currPage").getObject();
         var currPath = this.getOwnerComponent().getModel("currPage").getData().path;
-        this.getController("lifebook.view.main.master.Master").reloadPage(currPath + "\\" + object.name);
+        this.getOwnerComponent().navToPage(currPath + "/" + object.name);
       },
 
     });

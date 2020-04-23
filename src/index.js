@@ -55,7 +55,15 @@ app.use(publicPath, express.static(directory));
 
 app.post("/api/workspace/workspaceTree", WorkspaceApi.workspaceTree);
 
+app.post("/api/workspace/list", WorkspaceApi.listWorkspaces);
 
+app.post("/api/workspace/create", WorkspaceApi.createWorkspace);
+
+app.post("/api/workspace/delete", WorkspaceApi.deleteWorkspace);
+
+app.post("/api/workspace/set", WorkspaceApi.setCurrentWorkspace);
+
+app.post("/api/workspace/get", WorkspaceApi.getCurrentWorkspace);
 
 /* Page */
 
@@ -86,7 +94,10 @@ app.post("/api/file/copy", FileApi.copyFile);
 
 app.post("/api/file/move", FileApi.moveFile);
 
-app.post("*/upload", FileApi.uploadFile);
+app.post("/upload", FileApi.uploadFile);
+
+// app.route("api/file/upload").post(FileApi.uploadFile)
+
 
 app.get("/api/file/*", FileApi.getFile);
 

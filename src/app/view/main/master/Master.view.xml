@@ -1,23 +1,20 @@
 <mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:codeeditor="sap.ui.codeeditor" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:uxap="sap.uxap" controllerName="lifebook.view.main.master.Master" height="100%">
-   <Page showHeader="true">
-      <customHeader>
-         <Toolbar>
-            <!-- <SearchField search="onFilter" liveChange="onFilter"/> -->
-            <ToolbarSpacer />
-             <Button type="Transparent" icon="sap-icon://add-document" text="Neues Lifebook" press="onNewLifebook" />
-            <Button type="Transparent" icon="sap-icon://expand-all" press="onExpandAll" />
-            <Button type="Transparent" icon="sap-icon://collapse-all" press="onCollapseAll" />
-            <Button type="Transparent" icon="sap-icon://decline" press="onClose" visible="{device>/system/phone}" />
-         </Toolbar>
-      </customHeader>
-      <content>
-         <Tree id="lifebookTree" items="{path: 'tree>/items'}" showUnread="true" mode="SingleSelectMaster" selectionChange ="onSelectionChange" class="treeWhiteBackground">
-            <CustomTreeItem type="Active" class="noBorderBottom"  unread="{= (${tree>path} === ${currPage>/path} &amp;&amp; (${tree>type} === 'page' || ${tree>type} === 'lifebook') )  ? true : false }" selected="{= (${tree>path} === ${currPage>/path} &amp;&amp; (${tree>type} === 'page' || ${tree>type} === 'lifebook') )  ? true : false }" highlight="{= (${tree>path} === ${currPage>/path} &amp;&amp; (${tree>type} === 'page' || ${tree>type} === 'lifebook') )  ? 'Information': 'None' }">
-               <HBox visible="{=${tree>type} === 'page' || ${tree>type} === 'lifebook' }">
-                  <Text text="{tree>title}"/>
-               </HBox>
-            </CustomTreeItem>
-         </Tree>
-      </content>
-   </Page>
+	<Page showHeader="{device>/system/phone}">
+		<customHeader>
+			<Toolbar>
+				<ToolbarSpacer />
+				<!-- <Button type="Transparent" icon="sap-icon://expand-all" press="onExpandAll" /><Button type="Transparent" icon="sap-icon://collapse-all" press="onCollapseAll" /> -->
+				<Button type="Transparent" icon="sap-icon://decline" press="onClose" visible="{device>/system/phone}" />
+			</Toolbar>
+		</customHeader>
+		<content>
+			<Tree id="lifebookTree" items="{path: 'tree>/items'}" showUnread="true" mode="SingleSelectMaster" selectionChange ="onSelectionChange" class="treeWhiteBackground">
+				<CustomTreeItem type="Active" class="noBorderBottom" unread="{= (${tree>path} === ${currPage>/path})  ? true : false }" selected="{= (${tree>path} === ${currPage>/path})  ? true : false }" highlight="{= (${tree>path} === ${currPage>/path})  ? 'Information': 'None' }">
+					<Toolbar class="noBorderBottom" width="100%" >
+						<Text text="{tree>title}"/>
+					</Toolbar>
+				</CustomTreeItem>
+			</Tree>
+		</content>
+	</Page>
 </mvc:View>

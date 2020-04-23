@@ -11,18 +11,20 @@ sap.ui.define(["sap/ui/Device", 'sap/ui/core/XMLComposite'], function (Device, X
                 showSideContent: { type: "boolean", defaultValue: true },
                 showMainContent: { type: "boolean", defaultValue: true },
                 showSideContentSpace: { type: "boolean", defaultValue: true },
-                showMaster: {type: "boolean", defaultValue: true},
-                showDetail: {type: "boolean", defaultValue: true},
+                showMaster: { type: "boolean", defaultValue: true },
+                showDetail: { type: "boolean", defaultValue: true },
                 sideContentTitle: { type: "string", defaultValue: "" },
-                sideContentViewName: { type: "string", defaultValue: "" }
+                sideContentViewName: { type: "string", defaultValue: "" },
+                masterPageViewName: { type: "string", defaultValue: "" },
+                detailPageViewName: { type: "string", defaultValue: "" }
             },
 
             events: {
-                afterCloseSideContent : {
-                    parameters : {
-                      opener : "sap.ui.core.Control"
+                afterCloseSideContent: {
+                    parameters: {
+                        opener: "sap.ui.core.Control"
                     }
-                  }
+                }
             },
             aggregations: {
                 items: {
@@ -91,14 +93,33 @@ sap.ui.define(["sap/ui/Device", 'sap/ui/core/XMLComposite'], function (Device, X
         fragment: "lifebook.components.MDSPage",
 
         setSideContentViewName: function (sViewName) {
-            var navContainer = this.byId("sideContentNavContainer");
-            var page = this.getSideContentPage(sViewName);
+            this.setNavContainerPage(sViewName, "sideContentNavContainer");
+        },
+
+        setMasterPageViewName: function (sViewName) {
+            this.setNavContainerPage(sViewName, "masterPageContainer");
+        },
+
+        setDetailPageViewName: function (sViewName) {
+            this.setNavContainerPage(sViewName, "detailPageContainer");
+        },
+
+        setNavContainerPage: function (sViewName, sNavContainerId) {
+            var navContainer = this.byId(sNavContainerId);
+            var page = this.getNavContainerPage(sViewName, navContainer);
             if (page) {
                 navContainer.to(page.getId(), "show");
             }
         },
 
-        setShowMaster: function(bValue) {
+        getNavContainerPage: function (sViewName, oNavContainer) {
+            var page = oNavContainer.getPages().filter(function (page) {
+                return page.getViewName() === sViewName;
+            })[0]
+            return page;
+        },
+
+        setShowMaster: function (bValue) {
             if (bValue === false) {
                 this.byId("splitContainer").toDetail(this.byId("splitContainer").getDetailPages()[0])
             } else {
@@ -106,7 +127,7 @@ sap.ui.define(["sap/ui/Device", 'sap/ui/core/XMLComposite'], function (Device, X
             }
         },
 
-        setShowSideContent: function(bValue) {
+        setShowSideContent: function (bValue) {
             if (Device.system.phone) {
                 this.setShowSideContentSpace(bValue);
             }
@@ -114,27 +135,12 @@ sap.ui.define(["sap/ui/Device", 'sap/ui/core/XMLComposite'], function (Device, X
             //this.showSideContent = bValue;
         },
 
-        getMasterPage: function () {
-            this.byId("masterPageContainer").getContent()[0];
-        },
-
-        getDetailPage: function () {
-            this.byId("detailPageContainer").getContent()[0];
-        },
-
-        getSideContentPage: function (sViewName) {
-            var navContainer = this.byId("sideContentNavContainer");
-            var page = navContainer.getPages().filter(function (page) {
-                return page.getViewName() === sViewName;
-            })[0]
-            return page;
-        },
 
         onCloseSideContent: function (oEvent) {
             this.setShowSideContent(false);
 
             var navContainer = this.byId("sideContentNavContainer");
-            this.fireEvent("afterCloseSideContent", {value: navContainer.getCurrentPage()});
+            this.fireEvent("afterCloseSideContent", { value: navContainer.getCurrentPage() });
         }
 
     });

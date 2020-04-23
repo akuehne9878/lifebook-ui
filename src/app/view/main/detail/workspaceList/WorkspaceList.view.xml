@@ -1,0 +1,11 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:layout="sap.ui.layout" xmlns:uxap="sap.uxap" xmlns:u="sap.ui.unified" controllerName="lifebook.view.main.detail.workspaceList.WorkspaceList" height="100%">
+	<Page showHeader="false">
+		<content>
+			<VBox renderType="Bare" class="sapUiSmallMargin">
+				<List headerText="Workspace wechseln:" items="{path: 'workspaces>/items'}">
+					<StandardListItem type="Active" class="noBorderBottom" title="{workspaces>title}" press="onPress"></StandardListItem>
+				</List>
+			</VBox>
+		</content>
+	</Page>
+</mvc:View>

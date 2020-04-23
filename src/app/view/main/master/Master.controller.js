@@ -20,16 +20,20 @@ sap.ui.define(
 
       reloadLifebookTree: function () {
         var that = this;
-       
+
         var p = new Promise(function (resolve, reject) {
           var oRestModel = new RestModel();
-          oRestModel.tree({workspace: "lifebook"}).then(function (data) {
+          oRestModel.tree({ workspace: that.getOwnerComponent().getWorkspace() }).then(function (data) {
             oRestModel.setProperty("/", data);
 
+            if (data.items.length === 0) {
+              that.getController("lifebook.view.main.Main").setViewMode("workspace");
+              that.getOwnerComponent().getModel("currPage").setProperty("/", { path: "", title: "", content: "" });
+            } else {
+              that.getController("lifebook.view.main.Main").setViewMode("view");
+            }
             that.getModel("targetTree").setProperty("/", data);
             that.getModel("tree").setProperty("/", data);
-
-            that.expandTreeItem(localStorage.getItem("lifebook.currPage.path"));
 
             resolve();
           });
@@ -41,45 +45,18 @@ sap.ui.define(
         var oBindingContext = oEvent.getParameter("listItem").getBindingContext("tree");
         var oObj = oBindingContext.getObject();
 
-        if (oObj.type === "add") {
-          oBindingContext.getModel().setProperty(oBindingContext.getPath() + "/type", "addConfirm");
+        if (oObj.type === "page") {
+          this.getOwnerComponent().navToPage(oObj.path);
+        } else {
+          // workspace
+          this.getOwnerComponent().navToPage("");
         }
-
-        if (oObj.type === "lifebook" || oObj.type === "page") {
-          this.onCollapseAll();
-          this.expandTreeItem(oObj.path);
-          this.reloadPage(oObj.path);
-          this.getModel("mdsPage").setProperty("/showSideContent", false);
-        }
-      },
-
-      _navToPage: function (sPath) {
-        var oRouter = sap.ui.core.UIComponent.getRouterFor(this);
-        oRouter.navTo("page", {
-          path: encodeURIComponent(sPath)
-        });
-
-        var mainController = this.getController("lifebook.view.main.Main");
-        mainController.setViewMode("view");
       },
 
       onClose: function (oEvent) {
         this.getModel("mdsPage").setProperty("/showMaster", false);
       },
 
-      reloadPage: function (sPath, options) {
-        this.getModel("currPage").setProperty("/path", sPath);
-        localStorage.setItem("lifebook.currPage.path", sPath)
-        var that = this;
-        if (options && options.reloadTree) {
-          this.reloadLifebookTree().then(function () {
-            that._navToPage(sPath);
-          })
-        } else {
-          this._navToPage(sPath);
-        }
-
-      },
 
       onCreatePage: function (oEvent) {
         var that = this;
@@ -88,11 +65,10 @@ sap.ui.define(
         var oObj = oBindingContext.getObject();
 
         var oRestModel = new RestModel();
-        oRestModel.createPage({ title: oObj.title, path: oObj.path }).then(function (data) {
+        oRestModel.createPage({ title: oObj.title, path: oObj.path, workspace: this.getOwnerComponent().getWorkspace() }).then(function (data) {
           that._prepareLifebookModel(data);
           that.getModel("tree").setProperty("/", data);
-
-          that.reloadPage(oObj.path + "\\" + oObj.title);
+          that.getOwnerComponent().navToPage(oObj.path + "\\" + oObj.title);
 
         });
       },
@@ -108,6 +84,8 @@ sap.ui.define(
         if (!sPath) {
           return;
         }
+
+        sPath = sPath.replace(/\\/g, "/");
 
         var paths = [];
         var parts = sPath.split("/");
@@ -128,12 +106,16 @@ sap.ui.define(
 
         breadcrumbs.pop();  // remove last element
 
+        var oTree = this.getView().byId("lifebookTree");
+        oTree.collapseAll();
+        oTree.expandToLevel(1);
+
         var that = this;
         paths.forEach(function (path) {
-          var items = that.getView().byId("lifebookTree").getItems();
+          var items = oTree.getItems();
           items.forEach(function (item, index) {
             if (path === item.getBindingContext("tree").getObject("path")) {
-              that.getView().byId("lifebookTree").expand(index);
+              oTree.expand(index);
             }
           })
         });
@@ -166,7 +148,11 @@ sap.ui.define(
       onExpandAll: function (oEvent) {
         var oTree = this.getView().byId("lifebookTree");
         oTree.expandToLevel(10);
+      },
 
+      expandToLevel1: function(oEvent) {
+        var oTree = this.getView().byId("lifebookTree");
+        oTree.expandToLevel(1);
       },
 
       onCollapseAll: function (oEvent) {

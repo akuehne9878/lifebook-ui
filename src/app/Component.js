@@ -1,10 +1,11 @@
-sap.ui.define(["sap/ui/core/BusyIndicator","sap/ui/Device", "sap/ui/core/UIComponent", "sap/ui/model/json/JSONModel", "sap/ui/model/resource/ResourceModel"], function (BusyIndicator, Device, UIComponent, JSONModel, ResourceModel) {
+sap.ui.define(["sap/ui/core/BusyIndicator", "sap/ui/Device", "sap/ui/core/UIComponent", "sap/ui/model/json/JSONModel", "lifebook/model/RestModel", "sap/ui/model/resource/ResourceModel"], function (BusyIndicator, Device, UIComponent, JSONModel, RestModel, ResourceModel) {
   return UIComponent.extend("lifebook.Component", {
     metadata: {
       "includes": ["css/style.css", "css/gfm.css"], //custom css file path
     },
 
     init: function () {
+      BusyIndicator.show();
 
       // call the init function of the parent
       UIComponent.prototype.init.apply(this, arguments);
@@ -17,6 +18,7 @@ sap.ui.define(["sap/ui/core/BusyIndicator","sap/ui/Device", "sap/ui/core/UICompo
       window.ownerComponent = this;
       this._controllers = {};
 
+      this.setModel(new JSONModel(), "workspaces");
       this.setModel(new JSONModel(), "currPage");
       this.setModel(new JSONModel(), "tree");
       this.setModel(new JSONModel(), "targetTree");
@@ -30,10 +32,17 @@ sap.ui.define(["sap/ui/core/BusyIndicator","sap/ui/Device", "sap/ui/core/UICompo
         sideContentTitle: "",
         showSideContentSpace: !Device.system.phone,
         showSideContent: false,
-        showMaster: !Device.system.phone
+        showMaster: !Device.system.phone,
+        masterPageViewName: "lifebook.view.main.master.Master",
+        detailPageViewName: "lifebook.view.main.detail.AbstractPage"
       }), "mdsPage");
 
-      BusyIndicator.show();
+      var that = this;
+      var oRestModel = new RestModel();
+      oRestModel.getCurrentWorkspace().then(function (data) {
+        that._workspace = data.currentWorkspace;
+      })
+
 
     },
 
@@ -90,6 +99,23 @@ sap.ui.define(["sap/ui/core/BusyIndicator","sap/ui/Device", "sap/ui/core/UICompo
         });
       });
       return promise;
-    }
+    },
+
+    getWorkspace: function () {
+      return this._workspace;
+    },
+
+    navToPage: function (sPath) {
+      var oRouter = this.getRouter();
+      oRouter.navTo("page", {
+        workspace: this.getWorkspace(),
+        path: encodeURIComponent(sPath)
+      });
+
+      var mainController = this.getController("lifebook.view.main.Main");
+      mainController.setViewMode("view");
+    },
+
+
   });
 });

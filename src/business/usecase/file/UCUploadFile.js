@@ -17,7 +17,7 @@ var UCUploadFile = {
         var errMsg = null;
         options.files.forEach(function (file) {
 
-            var absolutePath = path.join(Constants.WORKSPACE_PATH, sPath, file.name)
+            var absolutePath = path.join(Constants.WORKSPACE_PATH(options.workspace), sPath, file.name)
 
             console.log("Upload File: filename=" + file.name);
             console.log("Upload File: absolutePath=" + absolutePath);

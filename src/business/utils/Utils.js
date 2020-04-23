@@ -8,8 +8,12 @@ var Utils = {
     console.log("---");
   },
 
-  buildResult: function(res, data) {
-    console.log(data);
+  buildResult: function(res, data, hideLog) {
+    var showLog = hideLog === undefined ? true : !hideLog;
+
+    if (showLog) {
+      console.log(data);
+    }
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.write(data);

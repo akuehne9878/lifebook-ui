@@ -53,12 +53,13 @@ sap.ui.define(
       _onSavePage: function (oEvent) {
         var oRestModel = new RestModel();
 
+        var workspace = this.getOwnerComponent().getWorkspace();
         var srcPath = this.getModel("currPage").getProperty("/path");
         var dstPath = this.getModel("currTarget").getProperty("/path");
         var title = this.getModel("currPage").getProperty("/title");
 
         var that = this;
-        oRestModel.movePage({ src: srcPath, dst: dstPath, title: title }).then(function (data) {
+        oRestModel.movePage({ workspace: workspace, src: srcPath, dst: dstPath, title: title }).then(function (data) {
           that.getController("lifebook.view.main.master.Master").reloadPage(srcPath, { reloadTree: true });
           that.getModel("mdsPage").setProperty("/showSideContent", false);
         });
@@ -67,6 +68,7 @@ sap.ui.define(
       _onSaveAttachment: function (oEvent) {
         var oRestModel = new RestModel();
 
+        var workspace = this.getOwnerComponent().getWorkspace();
         var srcPath = this.getModel("currPage").getProperty("/path");
         var dstPath = this.getModel("currTarget").getProperty("/path");
 
@@ -82,8 +84,8 @@ sap.ui.define(
         })
 
         var that = this;
-        oRestModel.moveFile({ src: srcPath, dst: dstPath, fileNames: fileNames }).then(function (data) {
-          that.getController("lifebook.view.main.detail.AbstractPage").reloadPage(srcPath, "attachments");
+        oRestModel.moveFile({ workspace: workspace, src: srcPath, dst: dstPath, fileNames: fileNames }).then(function (data) {
+          that.getController("lifebook.view.main.detail.AbstractPage").reloadPage(srcPath);
           that.getModel("mdsPage").setProperty("/showSideContent", false);
 
           that.getOwnerComponent().getModel("selectedAttachments").setProperty("/", null);

@@ -10,7 +10,7 @@ var UCRenameFile = {
      * @param {*} options 
      */
     perform: function (options) {
-        var fullPath = path.join(Constants.WORKSPACE_PATH, options.path);
+        var fullPath = path.join(Constants.WORKSPACE_PATH(options.workspace), options.path);
 
         var oldName = fullPath.split(path.sep).pop()
         var newPath = fullPath.replace(oldName, options.newTitle);

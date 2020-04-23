@@ -27,6 +27,7 @@ sap.ui.define([
             resetViewMode: function () {
                 this.getModel("toolbar").setProperty("/", {
                     menuButton: false,
+                    newWorkspace: false,
                     newPage: false,
                     renamePage: false,
                     editor: false,
@@ -76,6 +77,10 @@ sap.ui.define([
                     model.setProperty("/copySelection", true);
                     model.setProperty("/moveSelection", true);
                     model.setProperty("/deleteSelection", true);
+
+                } else if (sViewMode === "workspace") {
+                    model.setProperty("/newWorkspace", true);
+                    model.setProperty("/newPage", true);
                 }
 
                 if (this.getModel("currPage").getProperty("/type") === "invoice") {
@@ -105,6 +110,11 @@ sap.ui.define([
 
             onShowNewPage: function (oEvent) {
                 this._loadSideContent("lifebook.view.main.sidecontent.new.New", "Neue Seite", { parentPath: this.getOwnerComponent().getModel("currPage").getProperty("/path"), caller: this.getView().getViewName() })
+            },
+
+
+            onShowNewWorkspace: function (oEvent) {
+                this._loadSideContent("lifebook.view.main.sidecontent.newWorkspace.NewWorkspace", "Neuer Workspace");
             },
 
             onShowRenamePage: function (oEvent) {
@@ -139,7 +149,10 @@ sap.ui.define([
             onSavePage: function (oEvent) {
                 var model = new RestModel();
                 var that = this;
-                model.savePage(this.getModel("currPage").getData()).then(function (data) {
+
+                var currPage = this.getModel("currPage").getData();
+                var workspace = this.getOwnerComponent().getWorkspace();
+                model.savePage({ workspace: workspace, path: currPage.path, content: currPage.content }).then(function (data) {
                     that.setViewMode("view");
                 });
             },
@@ -151,16 +164,18 @@ sap.ui.define([
                     .getData();
 
                 var that = this;
+                var workspace = this.getOwnerComponent().getWorkspace();
                 MessageBox.confirm(currPage.title + " löschen?", {
                     actions: [sap.m.MessageBox.Action.NO, sap.m.MessageBox.Action.DELETE],
                     title: "Seite löschen",
                     onClose: function (sAction) {
                         if (sAction === sap.m.MessageBox.Action.DELETE) {
-                            oRestModel.deletePage({ path: currPage.path }).then(function (data) {
-                                that.getView().getModel("tree").setProperty("/", data);
-                                that.getView().getModel("targetTree").setProperty("/", data);
-
+                            oRestModel.deletePage({ workspace: workspace, path: currPage.path }).then(function (data) {
+                                // that.getView().getModel("tree").setProperty("/", data);
+                                // that.getView().getModel("targetTree").setProperty("/", data);
+                                that.getOwnerComponent().navToPage(currPage.path.substring(0, currPage.path.lastIndexOf("/")));
                             });
+
                         }
                     }
                 });
@@ -205,7 +220,7 @@ sap.ui.define([
                     onClose: function (sAction) {
                         if (sAction === sap.m.MessageBox.Action.DELETE) {
                             var oRestModel = new RestModel();
-                            oRestModel.deleteFile({ path: currPage.path, fileNames: fileNames }).then(function (data) {
+                            oRestModel.deleteFile({ path: currPage.path, workspace: that.getOwnerComponent().getWorkspace(), fileNames: fileNames }).then(function (data) {
                                 that.getModel("currPage").setProperty("/", oRestModel.getData());
                                 that.getModel("mdsPage").setProperty("/showSideContent", false);
                             });
@@ -228,7 +243,7 @@ sap.ui.define([
                     onClose: function (sAction) {
                         if (sAction === sap.m.MessageBox.Action.DELETE) {
                             var oRestModel = new RestModel();
-                            oRestModel.deleteFile({ path: currPage.path, fileNames: [currAttachment.name] }).then(function (data) {
+                            oRestModel.deleteFile({ path: currPage.path, workspace: that.getOwnerComponent().getWorkspace(), fileNames: [currAttachment.name] }).then(function (data) {
                                 that.getModel("currPage").setProperty("/", oRestModel.getData());
                                 that.getModel("mdsPage").setProperty("/showSideContent", false);
                             });
@@ -247,9 +262,13 @@ sap.ui.define([
                 if (name.indexOf("lifebook.view.main.sidecontent") === 0) {
                     this.getModel("currAttachment").setProperty("/", null);
 
-
                     this.getController("lifebook.view.main.detail.page.section.attachments.Attachments").unselectAllAttachments();
-                    this.setViewMode("view");
+
+                    if (this.getModel("currPage").getProperty("/path") !== "") {
+                        this.setViewMode("view");
+                    } else {
+                        this.setViewMode("workspace");
+                    }
                 }
 
                 if (Device.system.phone) {
@@ -260,7 +279,8 @@ sap.ui.define([
 
             onShowMenu: function (oEvent) {
                 this.getModel("mdsPage").setProperty("/showMaster", true);
-            }
+            },
+
 
         });
     });
